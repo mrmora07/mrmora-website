@@ -354,6 +354,14 @@ nav {
     filter: drop-shadow(0 15px 40px rgba(58,21,112,0.15));
 }
 
+.hero-logo-img {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    filter: drop-shadow(0 15px 40px rgba(58,21,112,0.2));
+}
+
 /* ===== SECTIONS COMMON ===== */
 .section-container {
     max-width: 1200px;
@@ -1062,7 +1070,7 @@ footer {
     .hero-content h1 { font-size: 2.2rem; }
     .hero-content p { font-size: 1.1rem; }
     .hero-graphic { order: -1; }
-    .hero-logo-container svg { max-width: 280px; }
+    .hero-logo-img { max-width: 300px; }
 
     .beneficios-grid, .portfolio-grid { grid-template-columns: 1fr; }
     .porque-grid { grid-template-columns: repeat(2, 1fr); }
