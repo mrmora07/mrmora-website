@@ -1,0 +1,587 @@
+<!-- 
+    Mr.Mora Software & AI - Website
+    =================================
+    Estructura de archivos:
+    ├── index.html
+    ├── css/
+    │   └── styles.css
+    ├── js/
+    │   └── main.js
+    └── assets/
+        └── images/
+            └── mr_mora_logo_instagram.png (opcional)
+
+    Para editar textos: Busca los comentarios "EDIT TEXT" en el código.
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr.Mora Software & AI | Inteligencia Artificial & Automatización</title>
+    <meta name="description" content="Agencia de IA y desarrollo de software a medida para empresas en USA. Automatización, consultoría y soluciones inteligentes.">
+
+    <!-- Hoja de estilos principal -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+    <!-- ==================== NAVIGATION ==================== -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="logo-nav" onclick="showPage('home')">
+                <span class="logo-text"><span class="mr">Mr.</span>Mora</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home')" class="active">Inicio</a></li>
+                <li><a href="#" onclick="showPage('servicios')">Servicios</a></li>
+                <li><a href="#" onclick="showPage('portfolio')">Portfolio</a></li>
+                <li><a href="#" onclick="showPage('faq')">FAQ</a></li>
+                <li><a href="#" onclick="showPage('contacto')">Contacto</a></li>
+            </ul>
+            <div class="mobile-menu" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ==================== HOME PAGE ==================== -->
+    <div id="home" class="page-section active">
+
+        <!-- ===== HERO ===== -->
+        <!-- EDIT TEXT: Change headline, subtitle, and CTA buttons below -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="hero-content">
+                    <h1 class="anim-fadeInUp">
+                        Inteligencia Artificial & <span>Automatización</span> para tu negocio
+                    </h1>
+                    <p class="anim-fadeInUp delay-2">
+                        Desarrollamos software a medida que optimiza, escala y compite. 
+                        Transformamos procesos en ventajas competitivas con tecnología inteligente.
+                    </p>
+                    <div class="hero-buttons anim-fadeInUp delay-3">
+                        <a href="#" onclick="showPage('contacto')" class="btn-primary">
+                            Diagnóstico Gratis
+                        </a>
+                        <a href="tel:+15550000000" class="btn-secondary">
+                            📞 Llamar
+                        </a>
+                        <a href="https://wa.me/15550000000" class="btn-secondary">
+                            💬 WhatsApp
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-graphic">
+                    <!-- Hero Logo -->
+                    <div class="hero-logo-container anim-float">
+                        <img src="assets/images/mr_mora_logo_instagram.png" 
+                             alt="Mr.Mora Software & AI Logo" 
+                             class="hero-logo-img"
+                             onerror="this.style.display='none'"
+                             style="max-width: 320px; width: 100%; height: auto; filter: drop-shadow(0 15px 40px rgba(58,21,112,0.2));">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== BENEFICIOS ===== -->
+        <!-- EDIT TEXT: Change titles and descriptions of each benefit card -->
+        <section class="beneficios">
+            <div class="section-container">
+                <h2 class="section-title scroll-reveal">
+                    ¿Qué hacemos por <span>tu negocio?</span>
+                </h2>
+                <p class="section-subtitle scroll-reveal">
+                    Soluciones diseñadas para generar resultados medibles desde el primer día
+                </p>
+                <div class="beneficios-grid">
+                    <!-- Benefit 1 -->
+                    <div class="beneficio-card scroll-reveal">
+                        <div class="beneficio-icon">⚡</div>
+                        <h3>Automatización de Procesos</h3>
+                        <p>Flujos inteligentes que funcionan 24/7. Ahorra tiempo y reduce costos operativos hasta un 70%.</p>
+                    </div>
+                    <!-- Benefit 2 -->
+                    <div class="beneficio-card scroll-reveal">
+                        <div class="beneficio-icon">💻</div>
+                        <h3>Software Personalizado</h3>
+                        <p>Soluciones a medida que escalan con tu negocio. No templates, sistemas 100% adaptados a ti.</p>
+                    </div>
+                    <!-- Benefit 3 -->
+                    <div class="beneficio-card scroll-reveal">
+                        <div class="beneficio-icon">🧠</div>
+                        <h3>Consultoría en IA</h3>
+                        <p>Estrategia tecnológica para transformar tu operación. Identificamos oportunidades de alto impacto.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== POR QUÉ MR.MORA ===== -->
+        <!-- EDIT TEXT: Change numbers and descriptions -->
+        <section class="porque">
+            <div class="section-container">
+                <h2 class="section-title scroll-reveal">
+                    ¿Por qué <span>Mr.Mora?</span>
+                </h2>
+                <div class="porque-grid">
+                    <div class="porque-item scroll-reveal">
+                        <span class="numero">50+</span>
+                        <h4>Empresas Atendidas</h4>
+                        <p>En USA y Latam</p>
+                    </div>
+                    <div class="porque-item scroll-reveal">
+                        <span class="numero">70%</span>
+                        <h4>Reducción de Costos</h4>
+                        <p>Promedio en automatización</p>
+                    </div>
+                    <div class="porque-item scroll-reveal">
+                        <span class="numero">24/7</span>
+                        <h4>Soporte Continuo</h4>
+                        <p>Siempre disponibles</p>
+                    </div>
+                    <div class="porque-item scroll-reveal">
+                        <span class="numero">100%</span>
+                        <h4>Soluciones a Medida</h4>
+                        <p>Nada de templates</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA BANNER ===== -->
+        <!-- EDIT TEXT: Change headline, subtitle, and button text -->
+        <section class="cta-banner">
+            <div class="section-container">
+                <h2 class="anim-fadeInUp">¿Listo para transformar tu negocio?</h2>
+                <p class="anim-fadeInUp delay-2">
+                    Agenda tu diagnóstico gratuito y descubre cómo la IA puede trabajar por ti.
+                </p>
+                <a href="#" onclick="showPage('contacto')" class="btn-primary anim-fadeInUp delay-3">
+                    Agendar Diagnóstico Gratis
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== SERVICIOS PAGE ==================== -->
+    <div id="servicios" class="page-section">
+
+        <!-- ===== HERO SERVICIOS ===== -->
+        <!-- EDIT TEXT: Change title and subtitle for Services page -->
+        <section class="hero-small">
+            <div class="hero-small-content">
+                <h1 class="anim-fadeInUp">Nuestros <span>Servicios</span></h1>
+                <p class="anim-fadeInUp delay-2">
+                    Soluciones integrales de IA y software diseñadas para escalar tu negocio 
+                    y optimizar cada proceso.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== SERVICIOS GRID ===== -->
+        <!-- EDIT TEXT: Change titles, descriptions and bullet points for each service -->
+        <section class="servicios">
+            <div class="section-container">
+                <div class="servicios-grid">
+                    <!-- Service 1 -->
+                    <div class="servicio-card scroll-reveal">
+                        <div class="icon">🤖</div>
+                        <h3>Automatización de Procesos</h3>
+                        <p>Flujos inteligentes que eliminan tareas repetitivas y liberan a tu equipo para lo que realmente importa.</p>
+                        <ul>
+                            <li>Automatización de reportes y documentos</li>
+                            <li>Flujos de aprobación inteligentes</li>
+                            <li>Integración entre herramientas</li>
+                            <li>Reducción de errores humanos</li>
+                        </ul>
+                    </div>
+                    <!-- Service 2 -->
+                    <div class="servicio-card scroll-reveal">
+                        <div class="icon">💻</div>
+                        <h3>Desarrollo Web & Software</h3>
+                        <p>Aplicaciones y sistemas construidos desde cero según tus necesidades específicas.</p>
+                        <ul>
+                            <li>Desarrollo web responsive</li>
+                            <li>Aplicaciones empresariales</li>
+                            <li>Sistemas de gestión internos</li>
+                            <li>APIs y microservicios</li>
+                        </ul>
+                    </div>
+                    <!-- Service 3 -->
+                    <div class="servicio-card scroll-reveal">
+                        <div class="icon">🔗</div>
+                        <h3>Integración de Sistemas</h3>
+                        <p>Conectamos todas tus herramientas para que trabajen como una sola plataforma unificada.</p>
+                        <ul>
+                            <li>Integración CRM-ERP</li>
+                            <li>Sincronización de bases de datos</li>
+                            <li>APIs personalizadas</li>
+                            <li>Migración de datos segura</li>
+                        </ul>
+                    </div>
+                    <!-- Service 4 -->
+                    <div class="servicio-card scroll-reveal">
+                        <div class="icon">🧠</div>
+                        <h3>Consultoría en IA</h3>
+                        <p>Estrategia tecnológica para identificar y ejecutar oportunidades de inteligencia artificial en tu negocio.</p>
+                        <ul>
+                            <li>Diagnóstico de madurez digital</li>
+                            <li>Roadmap de implementación</li>
+                            <li>Selección de tecnologías</li>
+                            <li>Capacitación de equipos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA SERVICIOS ===== -->
+        <!-- EDIT TEXT: Change CTA text -->
+        <section class="cta-banner">
+            <div class="section-container">
+                <h2>¿Necesitas una solución personalizada?</h2>
+                <p>Cada negocio es único. Hablemos de tus necesidades específicas.</p>
+                <a href="#" onclick="showPage('contacto')" class="btn-primary">
+                    Solicitar Propuesta
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== PORTFOLIO PAGE ==================== -->
+    <div id="portfolio" class="page-section">
+
+        <!-- ===== HERO PORTFOLIO ===== -->
+        <!-- EDIT TEXT: Change title and subtitle for Portfolio page -->
+        <section class="hero-small">
+            <div class="hero-small-content">
+                <h1 class="anim-fadeInUp">Casos de <span>Éxito</span></h1>
+                <p class="anim-fadeInUp delay-2">
+                    Resultados reales que demuestran el impacto de nuestras soluciones de IA y software.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== PORTFOLIO GRID ===== -->
+        <!-- EDIT TEXT: Change company names, metrics, problems, solutions and results -->
+        <section class="portfolio">
+            <div class="section-container">
+                <div class="portfolio-grid">
+                    <!-- Case 1 -->
+                    <div class="portfolio-card scroll-reveal">
+                        <div class="portfolio-header">
+                            <h3>Consultora Financiera</h3>
+                            <div class="tag">Automatización de Propuestas</div>
+                        </div>
+                        <div class="portfolio-body">
+                            <div class="metric">40h</div>
+                            <div class="metric-label">ahorradas por mes</div>
+                            <p>
+                                <strong>Problema:</strong> Generación manual de propuestas tomaba 3 días.<br><br>
+                                <strong>Solución:</strong> Sistema automatizado con IA que genera propuestas en minutos.<br><br>
+                                <strong>Resultado:</strong> 40 horas ahorradas mensualmente, errores reducidos en 90%.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Case 2 -->
+                    <div class="portfolio-card scroll-reveal">
+                        <div class="portfolio-header">
+                            <h3>E-commerce en Crecimiento</h3>
+                            <div class="tag">Web + Chatbot IA</div>
+                        </div>
+                        <div class="portfolio-body">
+                            <div class="metric">+150%</div>
+                            <div class="metric-label">aumento en conversión</div>
+                            <p>
+                                <strong>Problema:</strong> Baja conversión y atención al cliente lenta.<br><br>
+                                <strong>Solución:</strong> Nueva plataforma web + chatbot con IA para atención 24/7.<br><br>
+                                <strong>Resultado:</strong> Conversión aumentó 150%, satisfacción del cliente al 95%.
+                            </p>
+                        </div>
+                    </div>
+                    <!-- Case 3 -->
+                    <div class="portfolio-card scroll-reveal">
+                        <div class="portfolio-header">
+                            <h3>Empresa Logística</h3>
+                            <div class="tag">Integración de Sistemas</div>
+                        </div>
+                        <div class="portfolio-body">
+                            <div class="metric">-60%</div>
+                            <div class="metric-label">reducción en costos operativos</div>
+                            <p>
+                                <strong>Problema:</strong> 5 sistemas desconectados causando retrabajo.<br><br>
+                                <strong>Solución:</strong> Plataforma unificada con APIs y dashboard centralizado.<br><br>
+                                <strong>Resultado:</strong> Costos reducidos 60%, visibilidad total en tiempo real.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA PORTFOLIO ===== -->
+        <!-- EDIT TEXT: Change CTA text -->
+        <section class="cta-banner">
+            <div class="section-container">
+                <h2>Tu caso de éxito podría ser el siguiente</h2>
+                <p>Comencemos con un diagnóstico gratuito de tu operación.</p>
+                <a href="#" onclick="showPage('contacto')" class="btn-primary">
+                    Comenzar Ahora
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== FAQ PAGE ==================== -->
+    <div id="faq" class="page-section">
+
+        <!-- ===== HERO FAQ ===== -->
+        <!-- EDIT TEXT: Change title and subtitle for FAQ page -->
+        <section class="hero-small">
+            <div class="hero-small-content">
+                <h1 class="anim-fadeInUp">Preguntas <span>Frecuentes</span></h1>
+                <p class="anim-fadeInUp delay-2">
+                    Todo lo que necesitas saber sobre nuestros servicios de IA y desarrollo de software.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== FAQ ACCORDION ===== -->
+        <!-- EDIT TEXT: Change questions and answers below -->
+        <section class="faq">
+            <div class="section-container">
+                <!-- Question 1 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cuánto tiempo toma implementar una solución?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Depende de la complejidad del proyecto. Una automatización simple puede estar lista en 2-4 semanas, mientras que un sistema completo puede tomar 2-3 meses. Siempre te damos un timeline detallado antes de comenzar.</p>
+                    </div>
+                </div>
+                <!-- Question 2 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cuál es el costo aproximado?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Cada proyecto es único. Ofrecemos presupuestos personalizados después de entender tus necesidades. Trabajamos con diferentes modelos: proyectos fijos, retainer mensual, o por horas. El diagnóstico inicial es completamente gratuito.</p>
+                    </div>
+                </div>
+                <!-- Question 3 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cómo es el proceso de trabajo?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nuestro proceso tiene 4 fases: (1) Diagnóstico y descubrimiento, (2) Diseño de la solución, (3) Desarrollo e implementación, (4) Soporte y optimización. Te mantenemos informado en cada etapa con reuniones semanales.</p>
+                    </div>
+                </div>
+                <!-- Question 4 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Qué tipos de empresas pueden beneficiarse?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Trabajamos con empresas de todos los tamaños: desde solopreneurs hasta medianas empresas. Si tienes procesos repetitivos, datos que manejar, o quieres escalar tu operación, la IA puede ayudarte.</p>
+                    </div>
+                </div>
+                <!-- Question 5 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cómo es el soporte después del lanzamiento?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Ofrecemos soporte continuo con planes de mantenimiento. Incluye monitoreo, actualizaciones, resolución de incidencias y mejoras iterativas. No te dejamos solo después del lanzamiento.</p>
+                    </div>
+                </div>
+                <!-- Question 6 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Puedo actualizar mi sistema después?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Absolutamente. Diseñamos sistemas escalables y modulares. Puedes agregar funcionalidades, integrar nuevas herramientas o expandir a nuevos mercados sin reconstruir desde cero.</p>
+                    </div>
+                </div>
+                <!-- Question 7 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cuál es el ROI esperado?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Nuestros clientes típicamente ven ROI positivo entre 3-6 meses. La automatización reduce costos operativos 40-70%, y las soluciones de IA aumentan productividad y conversión significativamente. Te damos proyecciones específicas en la propuesta.</p>
+                    </div>
+                </div>
+                <!-- Question 8 -->
+                <div class="faq-item scroll-reveal">
+                    <button class="faq-question" onclick="toggleFaq(this)">
+                        ¿Cómo comenzamos?
+                        <span class="icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Es muy simple: agenda tu diagnóstico gratuito. En 30 minutos entendemos tu negocio, identificamos oportunidades y te damos una hoja de ruta clara. Sin compromiso, sin costo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA FAQ ===== -->
+        <!-- EDIT TEXT: Change CTA text -->
+        <section class="cta-banner">
+            <div class="section-container">
+                <h2>¿Tienes más preguntas?</h2>
+                <p>Estamos aquí para ayudarte. Contáctanos directamente.</p>
+                <a href="#" onclick="showPage('contacto')" class="btn-primary">
+                    Hablar con un Experto
+                </a>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== CONTACTO PAGE ==================== -->
+    <div id="contacto" class="page-section">
+
+        <!-- ===== HERO CONTACTO ===== -->
+        <!-- EDIT TEXT: Change title and subtitle for Contact page -->
+        <section class="hero-small">
+            <div class="hero-small-content">
+                <h1 class="anim-fadeInUp">Contáctanos</h1>
+                <p class="anim-fadeInUp delay-2">
+                    Estamos listos para transformar tu negocio. Agenda tu diagnóstico gratuito hoy.
+                </p>
+            </div>
+        </section>
+
+        <!-- ===== FORMULARIO DE CONTACTO ===== -->
+        <!-- EDIT TEXT: Change form labels, placeholders and contact info -->
+        <section class="contacto">
+            <div class="section-container">
+                <div class="contacto-grid">
+                    <div class="contacto-form scroll-reveal">
+                        <h3 style="margin-bottom: 1.5rem; color: var(--negro); font-size: 1.5rem;">
+                            Envíanos un mensaje
+                        </h3>
+                        <form onsubmit="event.preventDefault(); alert('¡Mensaje enviado! Te contactaremos pronto.');">
+                            <div class="form-group">
+                                <label>Nombre completo</label>
+                                <input type="text" placeholder="Tu nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="tu@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="tel" placeholder="+1 (555) 000-0000">
+                            </div>
+                            <div class="form-group">
+                                <label>Empresa</label>
+                                <input type="text" placeholder="Nombre de tu empresa">
+                            </div>
+                            <div class="form-group">
+                                <label>Mensaje</label>
+                                <textarea placeholder="Cuéntanos sobre tu proyecto..."></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary" style="width: 100%;">
+                                Enviar Mensaje
+                            </button>
+                        </form>
+                        <div style="margin-top: 1rem; text-align: center;">
+                            <a href="#" class="btn-primary" style="width: 100%; display: block; margin-top: 0.5rem;">
+                                📅 Agendar Cita
+                            </a>
+                        </div>
+                    </div>
+                    <div class="contacto-info scroll-reveal">
+                        <h3>Hablemos de tu <span>proyecto</span></h3>
+                        <p>Ya sea que necesites automatizar procesos, desarrollar software o implementar IA, estamos aquí para ayudarte.</p>
+
+                        <!-- EDIT TEXT: Change contact information below -->
+                        <div class="contacto-item">
+                            <div class="icon">📧</div>
+                            <div>
+                                <h4>Email</h4>
+                                <p>contacto@mrmoraai.com</p>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <div class="icon">📱</div>
+                            <div>
+                                <h4>WhatsApp</h4>
+                                <p>+1 (555) 000-0000</p>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <div class="icon">📞</div>
+                            <div>
+                                <h4>Teléfono</h4>
+                                <p>+1 (555) 000-0000</p>
+                            </div>
+                        </div>
+                        <div class="contacto-item">
+                            <div class="icon">🌎</div>
+                            <div>
+                                <h4>Cobertura</h4>
+                                <p>Atendemos empresas en USA & Latam</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- ==================== FOOTER ==================== -->
+    <!-- EDIT TEXT: Change footer links and texts -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-brand">
+                <span class="logo-footer"><span class="mr">Mr.</span>Mora <span style="font-size:0.7em; color:#999;">Software & AI</span></span>
+                <p>Inteligencia Artificial & Automatización para empresas que quieren crecer. Software a medida que escala contigo.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Servicios</h4>
+                <ul>
+                    <li><a href="#" onclick="showPage('servicios')">Automatización</a></li>
+                    <li><a href="#" onclick="showPage('servicios')">Desarrollo Web</a></li>
+                    <li><a href="#" onclick="showPage('servicios')">Integración</a></li>
+                    <li><a href="#" onclick="showPage('servicios')">Consultoría IA</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Empresa</h4>
+                <ul>
+                    <li><a href="#" onclick="showPage('portfolio')">Portfolio</a></li>
+                    <li><a href="#" onclick="showPage('faq')">FAQ</a></li>
+                    <li><a href="#" onclick="showPage('contacto')">Contacto</a></li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacidad</a></li>
+                    <li><a href="#">Términos</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Mr.Mora Software & AI. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Script principal -->
+    <script src="js/main.js"></script>
+</body>
+</html>
