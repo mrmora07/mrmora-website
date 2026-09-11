@@ -149,6 +149,7 @@ nav {
 }
 
 .logo-text .mr { color: var(--morado); }
+.logo-text .software { color: var(--morado); }
 
 .nav-links {
     display: flex;
