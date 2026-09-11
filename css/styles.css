@@ -142,7 +142,7 @@ nav {
 }
 
 .logo-text {
-    font-size: 1.5rem;
+    font-size: 1.65rem;
     font-weight: 800;
     color: var(--negro);
     letter-spacing: -0.5px;
@@ -357,7 +357,7 @@ nav {
 .hero-logo-img {
     display: block;
     width: 100%;
-    max-width: 420px;
+    max-width: 500px;
     height: auto;
     filter: drop-shadow(0 15px 40px rgba(58,21,112,0.2));
 }
@@ -1061,6 +1061,7 @@ footer {
     }
     .nav-links.active { display: flex; }
     .mobile-menu { display: flex; }
+    .logo-text { font-size: 1.3rem; }
 
     .hero-container {
         grid-template-columns: 1fr;
