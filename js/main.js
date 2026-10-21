@@ -28,8 +28,13 @@ const HERO_NOTES = [
 ];
 
 const HERO_SLOT_SETS = {
-    desktop: [0, 1, 3, 4],
-    mobile: [0, 1]
+    desktop: [0, 2, 3, 5],
+    mobile: [0, 1, 2, 3, 4, 5]
+};
+
+const HERO_VISIBLE_SLOT_SETS = {
+    desktop: HERO_SLOT_SETS.desktop,
+    mobile: [0, 2]
 };
 
 let heroRotationTimer = null;
@@ -38,6 +43,7 @@ let heroIntersectionObserver = null;
 let heroIsInView = false;
 let heroNextNoteIndex = 4;
 let heroActiveSlotIndexes = [];
+let heroAllowedSlotIndexes = [];
 let heroSetupMedia = null;
 let heroLayoutMode = '';
 let heroResizeListenerAdded = false;
@@ -99,7 +105,7 @@ function rotateHeroNote() {
     heroTransitionTimer = window.setTimeout(() => {
         heroTransitionTimer = null;
         outgoing.classList.remove('is-leaving');
-        const freeSlots = slots.filter(slot => !slot.classList.contains('is-visible'));
+        const freeSlots = slots.filter(slot => heroAllowedSlotIndexes.includes(Number(slot.dataset.slot)) && !slot.classList.contains('is-visible'));
         const availableSlots = freeSlots.filter(slot => Number(slot.dataset.slot) !== outgoingIndex);
         const entering = availableSlots[Math.floor(Math.random() * availableSlots.length)] || outgoing;
         const enteringIndex = Number(entering.dataset.slot);
@@ -128,11 +134,14 @@ function initializeHeroNotes() {
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     heroLayoutMode = `${mobile}-${reducedMotion}`;
     const slots = [...visual.querySelectorAll('.hero-note-slot')];
-    const selectedSlots = reducedMotion ? HERO_SLOT_SETS.desktop : (mobile ? HERO_SLOT_SETS.mobile : HERO_SLOT_SETS.desktop);
+    const selectedSlots = reducedMotion
+        ? HERO_SLOT_SETS.desktop
+        : (mobile ? HERO_VISIBLE_SLOT_SETS.mobile : HERO_VISIBLE_SLOT_SETS.desktop);
     const fixedReducedMotionNotes = [0, 1, 2, 3];
 
     slots.forEach(slot => slot.classList.remove('is-visible', 'is-leaving'));
     heroActiveSlotIndexes = selectedSlots;
+    heroAllowedSlotIndexes = reducedMotion ? HERO_SLOT_SETS.desktop : (mobile ? HERO_SLOT_SETS.mobile : slots.map((_, index) => index));
     selectedSlots.forEach((slotIndex, itemIndex) => {
         const noteIndex = reducedMotion ? fixedReducedMotionNotes[itemIndex] : itemIndex;
         renderHeroNote(slots[slotIndex], HERO_NOTES[noteIndex]);
