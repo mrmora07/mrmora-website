@@ -1,11 +1,10 @@
-// ============================================
-// Mr.Mora Software & AI - Main JavaScript
-// ============================================
+// Mr.Mora Software & AI - Navegación y formularios
 
-const GROWTH_AVAILABLE_SLOTS = null;
-const DEFAULT_PAGE_TITLE = document.title;
-const DEFAULT_META_DESCRIPTION = document.querySelector('meta[name="description"]')?.content || '';
-const GROWTH_FORM_MESSAGES = {
+const MONTHLY_AVAILABLE_SLOTS = null;
+const CALENDAR_URL = '';
+const WHATSAPP_NUMBER = '';
+
+const FORM_MESSAGES = {
     success: '¡Listo! Recibimos tus datos. Te contactaremos muy pronto para agendar tu llamada.',
     error: 'Algo salió mal al enviar el formulario. Por favor, inténtalo de nuevo en unos minutos.',
     required: 'Este campo es obligatorio.',
@@ -13,229 +12,395 @@ const GROWTH_FORM_MESSAGES = {
     phone: 'Escribe un número de teléfono válido.'
 };
 
-/**
- * Navegación entre páginas
- * Muestra la sección seleccionada y oculta las demás
- */
-function showPage(pageId) {
-    const page = document.getElementById(pageId);
-    if (!page) return;
+const HERO_NOTES = [
+    { icon: '⭐', text: 'Nueva reseña de 5 estrellas', area: 'growth' },
+    { icon: '📞', text: 'Llamada perdida → SMS enviado al instante', area: 'automation' },
+    { icon: '🔗', text: 'CRM y calendario sincronizados', area: 'software' },
+    { icon: '📄', text: 'Cotización enviada automáticamente', area: 'automation' },
+    { icon: '📍', text: 'Nuevo contacto desde Google', area: 'growth' },
+    { icon: '📅', text: 'Cita agendada para mañana', area: 'automation' },
+    { icon: '💻', text: 'Nueva función publicada en tu sistema', area: 'software' },
+    { icon: '🔁', text: 'Seguimiento automático enviado', area: 'automation' },
+    { icon: '🎯', text: 'Tu anuncio trajo un nuevo interesado', area: 'growth' },
+    { icon: '📊', text: 'Reporte semanal listo en tu correo', area: 'automation' },
+    { icon: '🧾', text: 'Factura creada automáticamente', area: 'automation' },
+    { icon: '🤖', text: 'Interesado calificado automáticamente', area: 'automation' }
+];
 
-    // Ocultar todas las páginas
-    document.querySelectorAll('.page-section').forEach(page => {
-        page.classList.remove('active');
+const HERO_SLOT_SETS = {
+    desktop: [0, 1, 3, 4],
+    mobile: [0, 1]
+};
+
+let heroRotationTimer = null;
+let heroTransitionTimer = null;
+let heroIntersectionObserver = null;
+let heroIsInView = false;
+let heroNextNoteIndex = 4;
+let heroActiveSlotIndexes = [];
+let heroSetupMedia = null;
+let heroLayoutMode = '';
+let heroResizeListenerAdded = false;
+
+function renderHeroNote(slot, note) {
+    const card = slot.querySelector('.hero-note-card');
+    const icon = document.createElement('span');
+    const text = document.createElement('span');
+    icon.className = 'note-icon';
+    icon.textContent = note.icon;
+    text.textContent = note.text;
+    card.replaceChildren(icon, text);
+    slot.dataset.area = note.area;
+}
+
+function stopHeroRotation() {
+    if (heroRotationTimer) {
+        window.clearTimeout(heroRotationTimer);
+        heroRotationTimer = null;
+    }
+}
+
+function startHeroRotation() {
+    stopHeroRotation();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const heroRect = document.getElementById('inicio').getBoundingClientRect();
+    heroIsInView = heroRect.bottom > 0 && heroRect.top < window.innerHeight && heroRect.right > 0 && heroRect.left < window.innerWidth;
+    if (reducedMotion || !heroIsInView || document.hidden) return;
+
+    heroRotationTimer = window.setTimeout(rotateHeroNote, 2800);
+}
+
+function updateHeroVisibility() {
+    const hero = document.getElementById('inicio');
+    if (!hero) return;
+    const bounds = hero.getBoundingClientRect();
+    const isVisible = bounds.bottom > 0 && bounds.top < window.innerHeight && bounds.right > 0 && bounds.left < window.innerWidth;
+    heroIsInView = isVisible;
+    if (isVisible) {
+        if (!heroRotationTimer) startHeroRotation();
+    } else {
+        stopHeroRotation();
+    }
+}
+
+function rotateHeroNote() {
+    heroRotationTimer = null;
+    const slots = [...document.querySelectorAll('.hero-note-slot')];
+    const activeSlots = heroActiveSlotIndexes
+        .map(index => slots[index])
+        .filter(slot => slot.classList.contains('is-visible'));
+    if (!activeSlots.length) return;
+
+    const outgoing = activeSlots[Math.floor(Math.random() * activeSlots.length)];
+    const outgoingIndex = Number(outgoing.dataset.slot);
+    outgoing.classList.remove('is-visible');
+    outgoing.classList.add('is-leaving');
+
+    heroTransitionTimer = window.setTimeout(() => {
+        heroTransitionTimer = null;
+        outgoing.classList.remove('is-leaving');
+        const freeSlots = slots.filter(slot => !slot.classList.contains('is-visible'));
+        const availableSlots = freeSlots.filter(slot => Number(slot.dataset.slot) !== outgoingIndex);
+        const entering = availableSlots[Math.floor(Math.random() * availableSlots.length)] || outgoing;
+        const enteringIndex = Number(entering.dataset.slot);
+        heroActiveSlotIndexes = heroActiveSlotIndexes.filter(index => index !== outgoingIndex);
+        heroActiveSlotIndexes.push(enteringIndex);
+        renderHeroNote(entering, HERO_NOTES[heroNextNoteIndex % HERO_NOTES.length]);
+        heroNextNoteIndex += 1;
+        window.requestAnimationFrame(() => entering.classList.add('is-visible'));
+        startHeroRotation();
+    }, 500);
+}
+
+function initializeHeroNotes() {
+    const hero = document.getElementById('inicio');
+    const visual = document.getElementById('hero-visual');
+    if (!hero || !visual) return;
+
+    if (heroIntersectionObserver) heroIntersectionObserver.disconnect();
+    stopHeroRotation();
+    if (heroTransitionTimer) {
+        window.clearTimeout(heroTransitionTimer);
+        heroTransitionTimer = null;
+    }
+
+    const mobile = window.matchMedia('(max-width: 850px)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    heroLayoutMode = `${mobile}-${reducedMotion}`;
+    const slots = [...visual.querySelectorAll('.hero-note-slot')];
+    const selectedSlots = reducedMotion ? HERO_SLOT_SETS.desktop : (mobile ? HERO_SLOT_SETS.mobile : HERO_SLOT_SETS.desktop);
+    const fixedReducedMotionNotes = [0, 1, 2, 3];
+
+    slots.forEach(slot => slot.classList.remove('is-visible', 'is-leaving'));
+    heroActiveSlotIndexes = selectedSlots;
+    selectedSlots.forEach((slotIndex, itemIndex) => {
+        const noteIndex = reducedMotion ? fixedReducedMotionNotes[itemIndex] : itemIndex;
+        renderHeroNote(slots[slotIndex], HERO_NOTES[noteIndex]);
+        slots[slotIndex].classList.add('is-visible');
     });
+    heroNextNoteIndex = reducedMotion ? HERO_NOTES.length : selectedSlots.length;
 
-    // Mostrar página seleccionada
-    page.classList.add('active');
+    if (!heroSetupMedia) {
+        heroSetupMedia = window.matchMedia('(max-width: 850px)');
+        heroSetupMedia.addEventListener('change', initializeHeroNotes);
+        window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', initializeHeroNotes);
+    }
 
-    // Actualizar link activo en navegación
-    document.querySelectorAll('.nav-links a').forEach(link => {
-        link.classList.remove('active');
-    });
+    if (!heroResizeListenerAdded) {
+        window.addEventListener('resize', () => {
+            const currentMode = `${window.matchMedia('(max-width: 850px)').matches}-${window.matchMedia('(prefers-reduced-motion: reduce)').matches}`;
+            if (currentMode !== heroLayoutMode) initializeHeroNotes();
+            else updateHeroVisibility();
+        }, { passive: true });
+        heroResizeListenerAdded = true;
+    }
 
-    // Encontrar y activar el link clickeado
-    const navLinks = document.querySelectorAll('.nav-links a');
-    navLinks.forEach(link => {
-        if (link.getAttribute('onclick').includes(pageId)) {
-            link.classList.add('active');
+    heroIntersectionObserver = new IntersectionObserver(() => {
+        updateHeroVisibility();
+    }, { threshold: 0 });
+    heroIntersectionObserver.observe(hero);
+    updateHeroVisibility();
+    startHeroRotation();
+}
+
+function initializeSolutionsToggle() {
+    const toggle = document.getElementById('solutions-toggle');
+    const extra = document.getElementById('solutions-extra');
+    if (!toggle || !extra) return;
+
+    document.documentElement.classList.add('js-enabled');
+    extra.hidden = true;
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+        const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        toggle.setAttribute('aria-expanded', String(!isExpanded));
+
+        if (isExpanded) {
+            extra.classList.remove('is-opening');
+            extra.hidden = true;
+            toggle.textContent = 'Ver 4 soluciones más ↓';
+        } else {
+            extra.hidden = false;
+            extra.classList.remove('is-opening');
+            window.requestAnimationFrame(() => extra.classList.add('is-opening'));
+            toggle.textContent = 'Ver menos ↑';
         }
     });
-
-    // Cerrar menú móvil
-    document.getElementById('navLinks').classList.remove('active');
-
-    // Scroll al top
-    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
-
-    const isGrowthPage = pageId === 'growth';
-    document.title = isGrowthPage
-        ? 'Marketing y Growth para pequeñas empresas | Atrae más clientes en automático'
-        : DEFAULT_PAGE_TITLE;
-    document.querySelector('meta[name="description"]').content = isGrowthPage
-        ? 'Sistema completo de atracción de clientes para pequeñas empresas: SEO local, anuncios y automatizaciones con IA en una membresía mensual. Agenda tu auditoría gratis.'
-        : DEFAULT_META_DESCRIPTION;
-
-    // Re-activar animaciones de scroll
-    setTimeout(checkScroll, 100);
 }
 
-/**
- * Toggle del menú móvil
- */
-function toggleMenu() {
-    document.getElementById('navLinks').classList.toggle('active');
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) stopHeroRotation();
+    else startHeroRotation();
+});
+
+function getOwningPage(target) {
+    if (target.classList.contains('page-section')) return target;
+    return target.closest('.page-section');
 }
 
-/**
- * Acordeón de FAQ
- * Abre/cierra las respuestas al hacer clic
- */
-function toggleFaq(button) {
-    const item = button.parentElement;
-    const isActive = item.classList.contains('active');
+function activatePage(page) {
+    if (!page) return;
 
-    // Cerrar todos los items FAQ
-    document.querySelectorAll('.faq-item').forEach(faq => {
-        faq.classList.remove('active');
+    document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.toggle('active', section === page);
     });
 
-    // Abrir el item clickeado si no estaba activo
-    if (!isActive) {
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
+        const linkTarget = document.getElementById(link.getAttribute('href').slice(1));
+        link.classList.toggle('active', Boolean(linkTarget && getOwningPage(linkTarget) === page && !link.classList.contains('nav-cta')));
+    });
+
+    closeMobileMenu();
+    window.setTimeout(checkScroll, 50);
+}
+
+function closeMobileMenu() {
+    const menu = document.getElementById('navLinks');
+    const button = document.getElementById('mobileMenu');
+    menu.classList.remove('active');
+    button.setAttribute('aria-expanded', 'false');
+    button.setAttribute('aria-label', 'Abrir menú');
+}
+
+function navigateToHash(hash, options = {}) {
+    const id = decodeURIComponent(hash.replace(/^#/, ''));
+    const target = document.getElementById(id);
+    if (!target) return false;
+
+    activatePage(getOwningPage(target));
+    if (options.updateHistory !== false) window.history.pushState(null, '', `#${id}`);
+
+    window.requestAnimationFrame(() => {
+        target.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth',
+            block: 'start'
+        });
+        updateHeroVisibility();
+    });
+
+    return true;
+}
+
+function toggleFaq(button) {
+    const item = button.closest('.faq-item');
+    const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+    document.querySelectorAll('.faq-question').forEach(question => {
+        question.setAttribute('aria-expanded', 'false');
+        question.closest('.faq-item').classList.remove('active');
+    });
+
+    if (!isExpanded) {
+        button.setAttribute('aria-expanded', 'true');
         item.classList.add('active');
     }
 }
 
-/**
- * Animación de revelado al hacer scroll
- * Los elementos con clase .scroll-reveal se animan al entrar en viewport
- */
 function checkScroll() {
-    const reveals = document.querySelectorAll('.scroll-reveal');
-    const windowHeight = window.innerHeight;
-
-    reveals.forEach(element => {
-        const elementTop = element.getBoundingClientRect().top;
-        if (elementTop < windowHeight - 100) {
+    document.querySelectorAll('.page-section.active .scroll-reveal').forEach(element => {
+        if (element.getBoundingClientRect().top < window.innerHeight - 80) {
             element.classList.add('revealed');
         }
     });
 }
 
-// ============================================
-// EVENT LISTENERS
-// ============================================
-
-// Detectar scroll para animaciones
-window.addEventListener('scroll', checkScroll);
-
-// Inicializar animaciones al cargar
-window.addEventListener('load', checkScroll);
-
-// Cerrar menú móvil al hacer clic fuera
-document.addEventListener('click', function(e) {
-    const nav = document.querySelector('nav');
-    const menu = document.getElementById('navLinks');
-    if (!nav.contains(e.target)) {
-        menu.classList.remove('active');
+function configureOptionalContactLinks() {
+    const slots = document.getElementById('contact-availability');
+    if (Number.isInteger(MONTHLY_AVAILABLE_SLOTS) && MONTHLY_AVAILABLE_SLOTS >= 0) {
+        slots.textContent = `Para mantener la calidad de los resultados, incorporamos un número limitado de negocios nuevos cada mes. Cupos disponibles este mes: ${MONTHLY_AVAILABLE_SLOTS}`;
+        slots.hidden = false;
     }
-});
 
-// ============================================
-// UTILIDADES ADICIONALES
-// ============================================
-
-/**
- * Smooth scroll para enlaces internos
- */
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (!targetId || targetId === '#') return;
-
-        const target = document.querySelector(targetId);
-        if (target) {
-            const ownerPage = target.closest('.page-section');
-            if (ownerPage && !ownerPage.classList.contains('active')) {
-                showPage(ownerPage.id);
+    const calendarLink = document.getElementById('calendar-link');
+    if (CALENDAR_URL) {
+        try {
+            const calendar = new URL(CALENDAR_URL);
+            if (calendar.protocol === 'https:' || calendar.protocol === 'http:') {
+                calendarLink.href = calendar.href;
+                calendarLink.hidden = false;
             }
-            target.scrollIntoView({
-                behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-            });
+        } catch {
+            // Keep the calendar link hidden until a valid URL is configured.
         }
-    });
-});
-
-function initializeGrowthForm() {
-    const form = document.getElementById('growth-form');
-    if (!form) return;
-
-    const availability = document.getElementById('growth-availability');
-    if (Number.isInteger(GROWTH_AVAILABLE_SLOTS) && GROWTH_AVAILABLE_SLOTS >= 0) {
-        availability.textContent = `Solo incorporamos 5 negocios nuevos al mes para mantener la calidad de los resultados. Cupos disponibles este mes: ${GROWTH_AVAILABLE_SLOTS}`;
-        availability.hidden = false;
     }
+
+    const whatsappLink = document.getElementById('whatsapp-float');
+    if (/^\d{8,15}$/.test(WHATSAPP_NUMBER)) {
+        whatsappLink.href = `https://wa.me/${WHATSAPP_NUMBER}?text=Hola,%20quiero%20un%20diagn%C3%B3stico%20gratis`;
+        whatsappLink.hidden = false;
+        document.body.classList.add('has-whatsapp');
+    }
+}
+
+function showContactFormResult(success) {
+    const message = document.getElementById('contact-form-message');
+    message.textContent = success ? FORM_MESSAGES.success : FORM_MESSAGES.error;
+    message.setAttribute('role', success ? 'status' : 'alert');
+    if (success) document.getElementById('contact-form').reset();
+}
+
+function initializeContactForm() {
+    const form = document.getElementById('contact-form');
+    const fields = [
+        { input: form.elements.name, error: document.getElementById('contact-name-error') },
+        { input: form.elements.email, error: document.getElementById('contact-email-error') },
+        { input: form.elements.phone, error: document.getElementById('contact-phone-error') },
+        { input: form.elements.business, error: document.getElementById('contact-business-error') },
+        { input: form.elements.interest, error: document.getElementById('contact-interest-error') }
+    ];
 
     form.addEventListener('submit', event => {
         event.preventDefault();
-        const message = document.getElementById('growth-form-message');
-        const fields = [
-            { input: form.elements.name, error: document.getElementById('growth-name-error') },
-            { input: form.elements.email, error: document.getElementById('growth-email-error') },
-            { input: form.elements.phone, error: document.getElementById('growth-phone-error') },
-            { input: form.elements.businessType, error: document.getElementById('growth-business-error') }
-        ];
-        let firstInvalidField = null;
+        const message = document.getElementById('contact-form-message');
+        let firstInvalid = null;
 
         fields.forEach(({ input, error }) => {
             const value = input.value.trim();
             let errorMessage = '';
 
             if (!value) {
-                errorMessage = GROWTH_FORM_MESSAGES.required;
+                errorMessage = FORM_MESSAGES.required;
             } else if (input.name === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-                errorMessage = GROWTH_FORM_MESSAGES.email;
+                errorMessage = FORM_MESSAGES.email;
             } else if (input.name === 'phone') {
                 const digits = value.replace(/\D/g, '');
                 if (!/^\+?[\d\s().-]+$/.test(value) || digits.length < 7 || digits.length > 15) {
-                    errorMessage = GROWTH_FORM_MESSAGES.phone;
+                    errorMessage = FORM_MESSAGES.phone;
                 }
             }
 
             error.textContent = errorMessage;
             input.setAttribute('aria-invalid', String(Boolean(errorMessage)));
-            if (errorMessage && !firstInvalidField) firstInvalidField = input;
+            if (errorMessage && !firstInvalid) firstInvalid = input;
         });
 
-        if (firstInvalidField) {
+        if (firstInvalid) {
             message.textContent = '';
-            firstInvalidField.focus();
+            firstInvalid.focus();
             return;
         }
 
-        // TODO: conectar el servicio elegido y llamar showGrowthFormResult(true) solo tras confirmar la recepción.
-        showGrowthFormResult(false);
+        // TODO: conectar el servicio de envío y llamar showContactFormResult(true) solo tras confirmar la recepción.
+        showContactFormResult(false);
     });
-}
 
-function showGrowthFormResult(success) {
-    const message = document.getElementById('growth-form-message');
-    message.textContent = success ? GROWTH_FORM_MESSAGES.success : GROWTH_FORM_MESSAGES.error;
-    if (success) document.getElementById('growth-form').reset();
-}
-
-initializeGrowthForm();
-
-const initialTarget = window.location.hash && document.querySelector(window.location.hash);
-if (initialTarget) {
-    const ownerPage = initialTarget.closest('.page-section');
-    if (ownerPage && !ownerPage.classList.contains('active')) showPage(ownerPage.id);
-    initialTarget.scrollIntoView({
-        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'
-    });
-}
-
-/**
- * Lazy loading para imágenes (futuro)
- * Descomenta cuando agregues imágenes reales
- */
-/*
-if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.classList.remove('lazy');
-                observer.unobserve(img);
-            }
+    fields.forEach(({ input, error }) => {
+        input.addEventListener('input', () => {
+            error.textContent = '';
+            input.removeAttribute('aria-invalid');
+        });
+        input.addEventListener('change', () => {
+            error.textContent = '';
+            input.removeAttribute('aria-invalid');
         });
     });
-
-    document.querySelectorAll('img[data-src]').forEach(img => {
-        imageObserver.observe(img);
-    });
 }
-*/
+
+document.getElementById('mobileMenu').addEventListener('click', event => {
+    const menu = document.getElementById('navLinks');
+    const isExpanded = event.currentTarget.getAttribute('aria-expanded') === 'true';
+    menu.classList.toggle('active', !isExpanded);
+    event.currentTarget.setAttribute('aria-expanded', String(!isExpanded));
+    event.currentTarget.setAttribute('aria-label', isExpanded ? 'Abrir menú' : 'Cerrar menú');
+});
+
+document.addEventListener('click', event => {
+    const nav = document.querySelector('nav');
+    if (!nav.contains(event.target)) closeMobileMenu();
+
+    const anchor = event.target.closest('a[href^="#"]');
+    if (!anchor) return;
+
+    const hash = anchor.getAttribute('href');
+    if (!hash || hash === '#') return;
+    const target = document.getElementById(decodeURIComponent(hash.slice(1)));
+    if (!target) return;
+
+    event.preventDefault();
+    const interest = anchor.dataset.interest;
+    navigateToHash(hash);
+    if (interest) document.getElementById('contact-interest').value = interest;
+});
+
+document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => toggleFaq(button));
+});
+
+window.addEventListener('scroll', () => {
+    checkScroll();
+    updateHeroVisibility();
+}, { passive: true });
+window.addEventListener('load', checkScroll);
+window.addEventListener('hashchange', () => navigateToHash(window.location.hash, { updateHistory: false }));
+window.addEventListener('popstate', () => navigateToHash(window.location.hash, { updateHistory: false }));
+
+configureOptionalContactLinks();
+initializeContactForm();
+initializeHeroNotes();
+initializeSolutionsToggle();
+
+if (window.location.hash) {
+    navigateToHash(window.location.hash, { updateHistory: false });
+} else {
+    activatePage(document.getElementById('home'));
+}
